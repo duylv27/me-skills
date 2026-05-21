@@ -61,19 +61,35 @@ Skills are reusable prompt libraries in `skills/`. Agents load them at runtime v
 
 ## Getting Started
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/duylv27/me-skills.git
-   ```
+### Install via npx (recommended)
 
-2. Open the workspace in VS Code.
+```bash
+npx javme-skills install
+```
 
-3. Ensure the **GitHub Copilot Chat** extension is installed and authenticated.
+This copies all skills and agents into `~/.copilot/skills/` and `~/.copilot/agents/`. Restart VS Code afterwards.
 
-4. Invoke any agent from the Copilot Chat panel:
-   - `@Cod Leader` — let the orchestrator route your request
-   - `@Duke` — jump straight to Java development
-   - `@Bob` — fix a security alert
+### Install via npm
+
+```bash
+npm install -g javme-skills
+javme-skills install
+```
+
+### Manual install
+
+```bash
+git clone https://github.com/duylv27/me-skills.git
+cp -r me-skills/skills ~/.copilot/skills
+cp -r me-skills/agents ~/.copilot/agents
+```
+
+---
+
+Once installed, invoke any agent from the Copilot Chat panel:
+- `@Cod Leader` — let the orchestrator route your request
+- `@Duke` — jump straight to Java development
+- `@Bob` — fix a security alert
 
 ---
 

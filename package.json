@@ -1,0 +1,19 @@
+{
+  "name": "javme-skills",
+  "version": "1.0.0",
+  "description": "GitHub Copilot skills and agents for Java delivery teams",
+  "keywords": ["github-copilot", "copilot-skills", "java", "agents"],
+  "author": "duylv27",
+  "license": "MIT",
+  "bin": {
+    "javme-skills": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "agents/"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
