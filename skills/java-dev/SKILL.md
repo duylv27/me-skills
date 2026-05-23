@@ -15,7 +15,79 @@ description: >
 Guide developers to write clean, resilient, production-grade Java code that is easy
 to test and maintain. Covers coding best practices, integration resilience patterns,
 and pre-PR review checklist.
- 
+
+---
+
+<rules>
+
+## Absolute Constraints — Never Violate
+
+| # | Rule |
+|---|------|
+| 1 | **No over-engineering.** No patterns, extra interfaces, or layers without a concrete, present need. If removing the abstraction tomorrow makes nothing harder — don't add it. |
+| 2 | **No bare catches.** Never `catch (Exception e)` or `catch (Throwable t)`. Always the most specific type. |
+| 3 | **No null from collection methods.** Always return `List.of()` / `Collections.emptyMap()` — never `null`. |
+| 4 | **No hardcoded secrets.** No credentials, tokens, or environment-specific URLs in source. |
+| 5 | **No string-concatenated logs.** Always parameterized SLF4J: `log.info("Order {}", id)`. Never `"Order " + id`. |
+| 6 | **No un-timed external calls.** Every HTTP / gRPC / DB call must have explicit connect + read timeouts. |
+| 7 | **No retry on non-idempotent operations.** Retry only operations safe to repeat without side effects. |
+| 8 | **No `System.out.println`.** Use SLF4J at the appropriate level. |
+| 9 | **No exceptions for control flow.** Exceptions signal errors, not branches. |
+| 10 | **No raw JPA entity exposure in APIs.** Always map to DTOs at the controller boundary. |
+| 11 | **No `@Data` on JPA entities.** `@Data` generates `equals`/`hashCode` from all fields — breaks Hibernate identity and lazy loading. Use `@Getter`/`@Setter` explicitly. |
+| 12 | **No `@Autowired` on fields.** Constructor injection only; injected fields must be `final`. |
+| 13 | **Prefer JSON / structured logging.** JSON logs parse faster and use fewer tokens in AI-assisted debugging; configure `logstash` format for production. |
+
+</rules>
+
+---
+
+<workflow>
+
+## Implementation Workflow
+
+Follow these phases in order for every Java task.
+
+### Phase 1 — Understand Before Writing
+1. Read every file touched by this change before writing any code.
+2. Identify the architectural layer: controller / service / repository / integration client.
+3. Check if the class or method already exists — extend, don't duplicate.
+4. Confirm the output contract: return type, exceptions that can propagate, nullability.
+
+### Phase 2 — Design (≤ 2 minutes)
+1. Name each class and method. Verify `PascalCase` nouns / `camelCase` verbs.
+2. List constructor-injected dependencies.
+3. Decide if external calls are involved → plan resilience: circuit breaker / retry / timeout / bulkhead.
+4. Identify input validation required at the system boundary.
+5. If the task spans > 1 layer or > 1 skill, build a todo list before writing any code.
+
+### Phase 3 — Implement
+1. Write the method skeleton with `Objects.requireNonNull` guards on all public entry points.
+2. Implement the happy path first; extract private helpers for any block > 5 lines.
+3. Add exception handling — catch specific types, `log.error("... {}", id, ex)`, wrap in domain exceptions at service boundaries.
+4. Apply `@Transactional` only on service methods that need atomicity; never on `private` methods.
+5. Wrap external calls with Resilience4j in order: `@Bulkhead → @CircuitBreaker → @Retry`.
+6. For logging: use structured parameters; add `traceId` / `spanId` to MDC; prefer JSON format in production.
+
+### Phase 4 — Validate
+1. Walk the Pre-PR Checklist (Part 3). Mark each item ✅ or ❌ with a remediation note.
+2. Verify all absolute constraints in `<rules>` — treat any violation as a blocker.
+3. Confirm no `System.out.println`, bare catches, `@Data` on entities, or hardcoded secrets.
+4. Confirm every external call has a configured timeout.
+
+### Phase 5 — Deliver
+Produce output in the standard format:
+```
+## Implementation Plan
+## Code
+## Configuration
+## Pre-PR Checklist
+```
+
+</workflow>
+
+---
+
 ## ⚠️ Core Principle: Don't Over-Engineer
  
 > Write the simplest code that correctly solves the problem at hand.

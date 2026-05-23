@@ -4,11 +4,11 @@ description: >
   GitHub CLI expert skill. Use for any gh CLI task: switch GitHub account, login, logout,
   check auth status, manage PRs (create, review, merge, comment, list), manage issues
   (create, close, assign, label, list), repo operations (clone, fork, view, list),
-  and any other gh command. Triggers include: "switch to duylv account", "gh auth switch",
+  and any other gh command. Triggers include: "switch to {username} account", "gh auth switch",
   "gh login", "check which account is active", "create a PR", "merge this PR",
   "open an issue", "list my PRs", "clone this repo", "fork", or any request involving
   the gh CLI tool.
-argument-hint: 'Describe what you want to do (e.g. "switch to duy-lv27 account", "create a PR for this branch")'
+argument-hint: 'Describe what you want to do (e.g. "switch GitHub account", "create a PR for this branch")'
 ---
 
 # GitHub CLI (gh)
@@ -30,7 +30,7 @@ gh auth status
 gh auth switch
 
 # Switch to a specific user directly
-gh auth switch --user duy-lv27
+gh auth switch --user <username>
 ```
 > If the account is not in the list, log in first (see below).
 
@@ -44,13 +44,14 @@ gh auth login
 ```bash
 gh auth logout
 # or target a specific user:
-gh auth logout --user duy-lv27
+gh auth logout --user <username>
 ```
 
 ### Set the active account for a single command
 ```bash
-GH_USER=duylv-27 gh pr list
+GH_USER=<username> gh pr list
 ```
+> Use `vscode_askQuestions` to ask the user which GitHub account to use before running this command — do not hardcode a username.
 
 ---
 
@@ -141,7 +142,7 @@ gh issue comment 456 --body "Fixed in #789"
 
 ### Assign / label
 ```bash
-gh issue edit 456 --add-assignee duy-lv27
+gh issue edit 456 --add-assignee @me
 gh issue edit 456 --add-label bug --remove-label wontfix
 ```
 
@@ -186,7 +187,7 @@ gh repo create my-new-repo --private --source=. --push
 | Task | Command |
 |------|---------|
 | Active account | `gh auth status` |
-| Switch account | `gh auth switch --user duy-lv27` |
+| Switch account | `gh auth switch --user <username>` |
 | Add account | `gh auth login` |
 | List PRs | `gh pr list` |
 | Create PR | `gh pr create` |

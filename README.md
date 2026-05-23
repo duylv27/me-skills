@@ -61,20 +61,22 @@ Skills are reusable prompt libraries in `skills/`. Agents load them at runtime v
 
 ## Getting Started
 
-### Install via npx (recommended)
+### Install via GitHub Packages
+
+**1. Authenticate** — add your [GitHub PAT](https://github.com/settings/tokens) (with `read:packages` scope) to `~/.npmrc`:
+
+```
+//npm.pkg.github.com/:_authToken=YOUR_TOKEN
+```
+
+**2. Install and run:**
 
 ```bash
-npx javme-skills install
+npm install -g @duylv27/javme-skills
+javme-skills install
 ```
 
 This copies all skills and agents into `~/.copilot/skills/` and `~/.copilot/agents/`. Restart VS Code afterwards.
-
-### Install via npm
-
-```bash
-npm install -g javme-skills
-javme-skills install
-```
 
 ### Manual install
 
